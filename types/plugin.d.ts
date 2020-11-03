@@ -1,8 +1,9 @@
-import { Vue as _Vue } from "./vue";
+import { Plugin } from 'webpack';
 
-export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
+interface WebpackPluginOptions {
+  filename?: string;
+}
 
-export interface PluginObject<T> {
-  install: PluginFunction<T>;
-  [key: string]: any;
+export interface WebpackPlugin {
+  new (options?: WebpackPluginOptions): Plugin;
 }

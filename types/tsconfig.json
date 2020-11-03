@@ -1,11 +1,13 @@
 {
-    "compilerOptions": {
-        "strict": true,
-        "lib": [
-            "es2015", "dom"
-        ]
-    },
-    "include": [
-        "./*.ts"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmit": true
+  },
+  "compileOnSave": false,
+  "include": [
+    "**/*.ts"
+  ]
 }

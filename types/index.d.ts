@@ -1,39 +1,50 @@
-import { Vue } from "./vue";
-import "./umd";
+import Vue, { VNode, VNodeDirective } from 'vue';
+import { Readable } from 'stream';
 
-export default Vue;
+export declare function createRenderer(options?: RendererOptions): Renderer;
 
-export {
-  CreateElement,
-  VueConstructor
-} from "./vue";
+export declare function createBundleRenderer(bundle: string | object, options?: BundleRendererOptions): BundleRenderer;
 
-export {
-  Component,
-  AsyncComponent,
-  ComponentOptions,
-  FunctionalComponentOptions,
-  RenderContext,
-  PropType,
-  PropOptions,
-  ComputedOptions,
-  WatchHandler,
-  WatchOptions,
-  WatchOptionsWithHandler,
-  DirectiveFunction,
-  DirectiveOptions
-} from "./options";
+type RenderCallback = (err: Error | null, html: string) => void;
 
-export {
-  PluginFunction,
-  PluginObject
-} from "./plugin";
+interface Renderer {
+  renderToString(vm: Vue, callback: RenderCallback): void;
+  renderToString(vm: Vue, context: object, callback: RenderCallback): void;
+  renderToString(vm: Vue): Promise<string>;
+  renderToString(vm: Vue, context: object): Promise<string>;
 
-export {
-  VNodeChildren,
-  VNodeChildrenArrayContents,
-  VNode,
-  VNodeComponentOptions,
-  VNodeData,
-  VNodeDirective
-} from "./vnode";
+  renderToStream(vm: Vue, context?: object): Readable;
+}
+
+interface BundleRenderer {
+  renderToString(callback: RenderCallback): void;
+  renderToString(context: object, callback: RenderCallback): void;
+  renderToString(): Promise<string>;
+  renderToString(context: object): Promise<string>;
+
+  renderToStream(context?: object): Readable;
+}
+
+interface RendererOptions {
+  template?: string;
+  inject?: boolean;
+  shouldPreload?: (file: string, type: string) => boolean;
+  shouldPrefetch?: (file: string, type: string) => boolean;
+  cache?: RenderCache;
+  directives?: {
+    [key: string]: (vnode: VNode, dir: VNodeDirective) => void
+  };
+}
+
+interface BundleRendererOptions extends RendererOptions {
+  clientManifest?: object;
+  serializer?: (state: object) => string;
+  runInNewContext?: boolean | 'once';
+  basedir?: string;
+}
+
+interface RenderCache {
+  get: (key: string, cb?: (res: string) => void) => string | void;
+  set: (key: string, val: string) => void;
+  has?: (key: string, cb?: (hit: boolean) => void) => boolean | void;
+}
