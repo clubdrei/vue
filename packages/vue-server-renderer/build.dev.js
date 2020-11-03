@@ -8848,8 +8848,12 @@ function mapIdToFile (id, clientManifest) {
     fileIndices.forEach(function (index) {
       var file = clientManifest.all[index];
       // only include async files or non-js, non-css assets
-      if (clientManifest.async.indexOf(file) > -1 || !(/\.(js|css)($|\?)/.test(file))) {
-        files.push(file);
+      if (
+        file &&
+        (clientManifest.async.indexOf(file) > -1 ||
+          !/\.(js|css)($|\?)/.test(file))
+      ) {
+        files.push(file)
       }
     });
   }
@@ -8874,7 +8878,7 @@ var TemplateRenderer = function TemplateRenderer (options) {
   this.inject = options.inject !== false;
   // if no template option is provided, the renderer is created
   // as a utility object for rendering assets like preload links and scripts.
-    
+
   var template = options.template;
   this.parsedTemplate = template
     ? typeof template === 'string'
